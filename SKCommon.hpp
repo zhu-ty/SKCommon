@@ -23,16 +23,19 @@
 #include <ctime>
 #include <algorithm>
 #if defined(_WIN32) || defined(WIN32)
+//#define _WINSOCKAPI_ 
 #include <windows.h>
 #include <direct.h>
 #include <time.h>
-#include <Winsock2.h>
+//#include <Winsock2.h>
+//#include <Winsock2.h>
 #else
 #include <signal.h>
 #include <sys/time.h>
 #include <stdarg.h>
 #include <pthread.h>
 #endif
+
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
@@ -58,8 +61,6 @@
 #else
 #define DELTA_EPOCH_IN_MICROSECS 11644473600000000ULL
 #endif
-
-
 #endif
 
 #define DEBUG_STRING std::string("file: " +   \
@@ -71,7 +72,6 @@
  )  \
  : std::string(__FILE__))  \
 + " line: " + std::to_string(__LINE__) +" func: " + std::string(__func__) +"\n") 
- 
 
 class SysUtil {
 private:
@@ -85,35 +85,6 @@ private:
 		cyan = 11
 	};
 public:
-
-	/***********************************************************/
-	/*                 Replace string function                 */
-	/***********************************************************/
-	static inline std::string stringReplace(std::string strBase, std::string strSrc, std::string strDes)
-	{
-		std::string::size_type pos = 0;
-		std::string::size_type srcLen = strSrc.size();
-		std::string::size_type desLen = strDes.size();
-		pos = strBase.find(strSrc, pos);
-		while ((pos != std::string::npos))
-		{
-			strBase.replace(pos, srcLen, strDes);
-			pos = strBase.find(strSrc, (pos + desLen));
-		}
-		return strBase;
-	}
-
-	/***********************************************************/
-	/*             Get file name from path function            */
-	/***********************************************************/
-	static inline std::string getFileName(std::string path)
-	{
-		path = stringReplace(path, "\\", "/");
-		return (path.find_last_of("/") != std::string::npos) ? path.erase(0, path.find_last_of("/") + 1) : path;
-	}
-
-
-
 	/***********************************************************/
 	/*                    mkdir function                       */
 	/***********************************************************/
@@ -200,64 +171,6 @@ public:
 		return 0;
 	}
 
-	struct timezone
-	{
-		int  tz_minuteswest; // minutes W of Greenwich  
-		int  tz_dsttime;     // type of dst correction
-	};
-
-#ifdef WIN32
-	static int gettimeofday(struct timeval *tv, struct timezone *tz)
-	{
-		FILETIME ft;
-		uint64_t tmpres = 0;
-		static int tzflag = 0;
-
-
-		if (tv)
-		{
-#ifdef _WIN32_WCE
-			SYSTEMTIME st;
-			GetSystemTime(&st);
-			SystemTimeToFileTime(&st, &ft);
-#else
-			GetSystemTimeAsFileTime(&ft);
-#endif
-
-
-			tmpres |= ft.dwHighDateTime;
-			tmpres <<= 32;
-			tmpres |= ft.dwLowDateTime;
-
-
-			/*converting file time to unix epoch*/
-			tmpres /= 10;  /*convert into microseconds*/
-			tmpres -= DELTA_EPOCH_IN_MICROSECS;
-			tv->tv_sec = (long)(tmpres / 1000000UL);
-			tv->tv_usec = (long)(tmpres % 1000000UL);
-		}
-
-
-		if (tz) {
-			if (!tzflag) {
-				tzflag++;
-			}
-			tz->tz_minuteswest = _timezone / 60;
-			tz->tz_dsttime = _daylight;
-		}
-
-
-		return 0;
-	}
-#endif
-
-	static int64_t getCurrentTimeMicroSecond()
-	{
-		struct timeval tv;
-		gettimeofday(&tv, NULL);
-		return tv.tv_sec * (int64_t)1000000 + tv.tv_usec;
-	}
-
 	static std::string getTimeString()
 	{
 		time_t timep;
@@ -265,6 +178,86 @@ public:
 		char tmp[64];
 		strftime(tmp, sizeof(tmp), "__%Y_%m_%d_%H_%M_%S__", localtime(&timep));
 		return tmp;
+	}
+
+	struct timezone
+	{
+		int  tz_minuteswest; // minutes W of Greenwich  
+		int  tz_dsttime;     // type of dst correction
+	};
+
+//#ifdef WIN32
+//	static int gettimeofday(struct timeval *tv, struct timezone *tz)
+//	{
+//		FILETIME ft;
+//		uint64_t tmpres = 0;
+//		static int tzflag = 0;
+//
+//
+//		if (tv)
+//		{
+//#ifdef _WIN32_WCE
+//			SYSTEMTIME st;
+//			GetSystemTime(&st);
+//			SystemTimeToFileTime(&st, &ft);
+//#else
+//			GetSystemTimeAsFileTime(&ft);
+//#endif
+//
+//
+//			tmpres |= ft.dwHighDateTime;
+//			tmpres <<= 32;
+//			tmpres |= ft.dwLowDateTime;
+//
+//
+//			/*converting file time to unix epoch*/
+//			tmpres /= 10;  /*convert into microseconds*/
+//			tmpres -= DELTA_EPOCH_IN_MICROSECS;
+//			tv->tv_sec = (long)(tmpres / 1000000UL);
+//			tv->tv_usec = (long)(tmpres % 1000000UL);
+//		}
+//
+//
+//		if (tz) {
+//			if (!tzflag) {
+//				tzflag++;
+//			}
+//			tz->tz_minuteswest = _timezone / 60;
+//			tz->tz_dsttime = _daylight;
+//		}
+//
+//
+//		return 0;
+//	}
+//#endif
+
+	static int64_t getCurrentTimeMicroSecond()
+	{
+#if !defined(_WIN32) || !defined(WIN32)
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return tv.tv_sec * (int64_t)1000000 + tv.tv_usec;
+#else
+		FILETIME ft;
+		uint64_t tmpres = 0;
+#ifdef _WIN32_WCE
+		SYSTEMTIME st;
+		GetSystemTime(&st);
+		SystemTimeToFileTime(&st, &ft);
+#else
+		GetSystemTimeAsFileTime(&ft);
+#endif
+		tmpres |= ft.dwHighDateTime;
+		tmpres <<= 32;
+		tmpres |= ft.dwLowDateTime;
+		/*converting file time to unix epoch*/
+		tmpres /= 10;  /*convert into microseconds*/
+		tmpres -= DELTA_EPOCH_IN_MICROSECS;
+		auto tv_sec = (long)(tmpres / 1000000UL);
+		auto tv_usec = (long)(tmpres % 1000000UL);
+		return tv_sec * (int64_t)1000000 + tv_usec;
+#endif
+		
 	}
 
 	static inline std::string format(const char *msg, ...)
