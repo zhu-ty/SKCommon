@@ -44,6 +44,10 @@
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+#define VALUE_TO_STRING(x) #x
+#define VALUE(x) VALUE_TO_STRING(x)
+#define VAR_NAME_VALUE(var) #var "="  VALUE(var)
+
 #ifndef WIN32
 #define BLACK_TEXT(x) "\033[30;1m" << x << "\033[0m"
 #define RED_TEXT(x) "\033[31;1m" << x << "\033[0m"
