@@ -186,51 +186,6 @@ public:
 		int  tz_dsttime;     // type of dst correction
 	};
 
-//#ifdef WIN32
-//	static int gettimeofday(struct timeval *tv, struct timezone *tz)
-//	{
-//		FILETIME ft;
-//		uint64_t tmpres = 0;
-//		static int tzflag = 0;
-//
-//
-//		if (tv)
-//		{
-//#ifdef _WIN32_WCE
-//			SYSTEMTIME st;
-//			GetSystemTime(&st);
-//			SystemTimeToFileTime(&st, &ft);
-//#else
-//			GetSystemTimeAsFileTime(&ft);
-//#endif
-//
-//
-//			tmpres |= ft.dwHighDateTime;
-//			tmpres <<= 32;
-//			tmpres |= ft.dwLowDateTime;
-//
-//
-//			/*converting file time to unix epoch*/
-//			tmpres /= 10;  /*convert into microseconds*/
-//			tmpres -= DELTA_EPOCH_IN_MICROSECS;
-//			tv->tv_sec = (long)(tmpres / 1000000UL);
-//			tv->tv_usec = (long)(tmpres % 1000000UL);
-//		}
-//
-//
-//		if (tz) {
-//			if (!tzflag) {
-//				tzflag++;
-//			}
-//			tz->tz_minuteswest = _timezone / 60;
-//			tz->tz_dsttime = _daylight;
-//		}
-//
-//
-//		return 0;
-//	}
-//#endif
-
 	static int64_t getCurrentTimeMicroSecond()
 	{
 #if !defined(_WIN32) || !defined(WIN32)
@@ -278,6 +233,29 @@ public:
 		va_end(list);
 
 		return std::string(text);
+	}
+
+	static inline bool existFile(const std::string& name) {
+		if (FILE *file = fopen(name.c_str(), "r")) {
+			fclose(file);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	static inline std::string toLower(std::string in)
+	{
+		std::transform(in.begin(), in.end(), in.begin(), singletolower); //Better than ::tolower() when work with UTF-8
+		return in;
+	}
+	
+private:
+	static char singletolower(char in) {
+		if (in <= 'Z' && in >= 'A')
+			return in - ('Z' - 'z');
+		return in;
 	}
 };
 
