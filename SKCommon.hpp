@@ -77,7 +77,9 @@
  : std::string(__FILE__))  \
 + " line: " + std::to_string(__LINE__) +" func: " + std::string(__func__) +"\n") 
 
-class SysUtil {
+
+
+class SKCommon {
 private:
 	enum class ConsoleColor {
 		red = 12,
@@ -129,9 +131,9 @@ public:
 	/***********************************************************/
 	static int errorOutput(std::string info) {
 #ifdef WIN32
-		SysUtil::setConsoleColor(ConsoleColor::red);
+		SKCommon::setConsoleColor(ConsoleColor::red);
 		std::cerr << "ERROR: " << info.c_str() << std::endl;
-		SysUtil::setConsoleColor(ConsoleColor::white);
+		SKCommon::setConsoleColor(ConsoleColor::white);
 #else
 		std::cerr << RED_TEXT("ERROR: ") << RED_TEXT(info.c_str())
 			<< std::endl;
@@ -141,9 +143,9 @@ public:
 
 	static int warningOutput(std::string info) {
 #ifdef WIN32
-		SysUtil::setConsoleColor(ConsoleColor::yellow);
+		SKCommon::setConsoleColor(ConsoleColor::yellow);
 		std::cerr << "WARNING: " << info.c_str() << std::endl;
-		SysUtil::setConsoleColor(ConsoleColor::white);
+		SKCommon::setConsoleColor(ConsoleColor::white);
 #else
 		std::cerr << YELLOW_TEXT("WARNING: ") << YELLOW_TEXT(info.c_str())
 			<< std::endl;
@@ -153,9 +155,9 @@ public:
 
 	static int infoOutput(std::string info) {
 #ifdef WIN32
-		SysUtil::setConsoleColor(ConsoleColor::green);
+		SKCommon::setConsoleColor(ConsoleColor::green);
 		std::cerr << "INFO: " << info.c_str() << std::endl;
-		SysUtil::setConsoleColor(ConsoleColor::white);
+		SKCommon::setConsoleColor(ConsoleColor::white);
 #else
 		std::cerr << GREEN_TEXT("INFO: ") << GREEN_TEXT(info.c_str())
 			<< std::endl;
@@ -165,9 +167,9 @@ public:
 
 	static int debugOutput(std::string info) {
 #ifdef WIN32
-		SysUtil::setConsoleColor(ConsoleColor::pink);
+		SKCommon::setConsoleColor(ConsoleColor::pink);
 		std::cerr << "DEBUG INFO: " << info.c_str() << std::endl;
-		SysUtil::setConsoleColor(ConsoleColor::white);
+		SKCommon::setConsoleColor(ConsoleColor::white);
 #else
 		std::cerr << MAGENTA_TEXT("DEBUG INFO: ") << MAGENTA_TEXT(info.c_str())
 			<< std::endl;
