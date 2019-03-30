@@ -32,6 +32,8 @@
 #else
 #include <signal.h>
 #include <sys/time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <stdarg.h>
 #include <pthread.h>
 #endif
@@ -98,9 +100,8 @@ public:
 #ifdef WIN32
 		_mkdir(dir);
 #else
-		char command[256];
-		sprintf(command, "mkdir %s", dir);
-		system(command);
+		infoOutput("Makring dir :" + std::string(dir));
+		printf("MKDIR RETURN:: %d\n",::mkdir(dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH));
 #endif
 		return 0;
 	}
