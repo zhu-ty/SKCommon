@@ -296,6 +296,7 @@ namespace SKOpenGL {
 		*/
 		enum class DepthOption
 		{
+			Default = 0x0,
 			ReadOnly = 0x1,
 			NonTest = 0x2,
 			ClearAfter = 0x4

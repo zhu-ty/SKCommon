@@ -542,12 +542,8 @@ int SKOpenGL::window::Render(GLuint textureID, callback &ret)
 {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 	// Enable depth test
-	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-	glDepthFunc(GL_LESS);
-	// RGBA texture blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	double currentTime = glfwGetTime();
