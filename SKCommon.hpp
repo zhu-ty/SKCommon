@@ -22,6 +22,8 @@
 #include <string>
 #include <ctime>
 #include <algorithm>
+#include <random>
+#include <regex>
 #if defined(_WIN32) || defined(WIN32)
 //#define _WINSOCKAPI_ 
 #include <windows.h>
@@ -242,6 +244,11 @@ public:
 		return std::string(text);
 	}
 
+	static int mkEmptyFile(std::string dir) {
+		FILE *a = fopen(dir.c_str(), "w");
+		return fclose(a);
+	}
+
 	static inline bool existFile(const std::string& name) {
 		if (FILE *file = fopen(name.c_str(), "r")) {
 			fclose(file);
@@ -273,6 +280,15 @@ public:
 	{
 		std::transform(in.begin(), in.end(), in.begin(), singletolower); //Better than ::tolower() when work with UTF-8
 		return in;
+	}
+
+	static std::vector<std::string> splitString(std::string input, std::string regex) {
+		// passing -1 as the submatch index parameter performs splitting
+		std::regex re(regex);
+		std::sregex_token_iterator
+			first{ input.begin(), input.end(), re, -1 },
+			last;
+		return{ first, last };
 	}
 	
 private:
