@@ -99,10 +99,10 @@ public:
 	/*                    mkdir function                       */
 	/***********************************************************/
 	static int mkdir(char* dir) {
+		infoOutput("Makring dir :" + std::string(dir));
 #ifdef WIN32
 		_mkdir(dir);
 #else
-		infoOutput("Makring dir :" + std::string(dir));
 		printf("MKDIR RETURN:: %d\n",::mkdir(dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH));
 #endif
 		return 0;
@@ -274,6 +274,16 @@ public:
 		}
 		fclose(dst);
 		fclose(src);
+	}
+
+	static int removeFile(std::string file)
+	{
+		return remove(file.c_str());
+	}
+
+	static int mkfile(std::string file) {
+		FILE *a = fopen(file.c_str(), "w");
+		return fclose(a);
 	}
 	
 	static inline std::string toLower(std::string in)
