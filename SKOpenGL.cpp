@@ -334,6 +334,18 @@ int SKOpenGL::data::LoadTextureMask(cv::Mat file, cv::Mat mask, GLuint & texture
 	return 0;
 }
 
+int SKOpenGL::data::ReadTextureRGB(GLuint textureID, cv::Mat & read)
+{
+	int w, h;
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+	read.create(h, w, CV_8UC3);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, read.data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return 0;
+}
+
 bool SKOpenGL::data::Mat_CV2GLM(const cv::Mat & cvmat, glm::mat4 * glmmat)
 {
 	if (cvmat.cols != 4 || cvmat.rows != 4 || cvmat.type() != CV_32FC1) {

@@ -76,6 +76,8 @@ namespace SKOpenGL {
 		static int LoadTextureMask(std::string file_path, std::string mask_path, GLuint &texture_id);
 		static int LoadTextureMask(cv::Mat file,cv::Mat mask, GLuint &texture_id);
 
+		static int ReadTextureRGB(GLuint textureID, cv::Mat &read);
+
 		static bool Mat_CV2GLM(const cv::Mat& cvmat, glm::mat4* glmmat);
 		static bool Mat_GLM2CV(const glm::mat4& glmmat, cv::Mat* cvmat);
 
