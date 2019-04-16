@@ -81,6 +81,8 @@
  : std::string(__FILE__))  \
 + " line: " + std::to_string(__LINE__) +" func: " + std::string(__func__) +"\n") 
 
+#define SKCOMMON_USED
+
 
 
 class SKCommon {

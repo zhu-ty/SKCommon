@@ -340,9 +340,10 @@ int SKOpenGL::data::ReadTextureRGB(GLuint textureID, cv::Mat & read)
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
-	read.create(h, w, CV_8UC3);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, read.data);
+	read.create(h, w, CV_8UC4);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, read.data);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	cv::cvtColor(read, read, cv::COLOR_RGBA2RGB);
 	return 0;
 }
 
