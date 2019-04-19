@@ -452,6 +452,7 @@ int SKOpenGL::window::InitGlfw(WindowSetting setting, std::string name)
 	if (_setting.renderMode == RenderMode::Window)
 		windowPtr = glfwCreateWindow(WindowSize.width, WindowSize.height, name.c_str(), NULL, NULL);
 	else windowPtr = glfwCreateWindow(ScreenSize.width, ScreenSize.height, name.c_str(), special_monitor, NULL);
+	glfwSetWindowPos(windowPtr, 100, 100);
 	if (windowPtr == nullptr)
 	{
 		SKCommon::errorOutput(DEBUG_STRING + " Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.");
