@@ -591,6 +591,12 @@ int SKOpenGL::window::Render(GLuint textureID, callback &ret)
 	return 0;
 }
 
+int SKOpenGL::window::UpdateLastTimeStamp()
+{
+	last_currentTime = glfwGetTime();
+	return 0;
+}
+
 void SKOpenGL::window::mouse_cursor_callback(GLFWwindow* window, double xpos, double ypos) {
 
 	if (control_param.firstMove) // 这个bool变量一开始是设定为true的

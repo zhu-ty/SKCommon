@@ -149,6 +149,8 @@ namespace SKOpenGL {
 		static int InitGlfw(WindowSetting setting, std::string name = "SKOpenGL Window");
 		static GLFWwindow* GetWindowPtr() { return windowPtr; }
 		static int Render(GLuint textureID, callback &ret);
+		//clear last_currentTime to now
+		static int UpdateLastTimeStamp();
 	private:
 		static void mouse_cursor_callback(GLFWwindow* window, double xpos, double ypos);
 		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
