@@ -252,7 +252,7 @@ int SKOpenGL::data::LoadTexture(cv::Mat file, GLuint & texture_id)
 {
 	if (file.channels() != 3 || ((file.type() & CV_MAT_DEPTH_MASK) != CV_8U))
 	{
-		SKCommon::errorOutput(DEBUG_STRING + "Only 3 channel uchar BGR image is now supported.");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + "Only 3 channel uchar BGR image is now supported.");
 		return -1;
 	}
 	cv::Mat img;
@@ -302,7 +302,7 @@ int SKOpenGL::data::LoadTextureMask(cv::Mat file, cv::Mat mask, GLuint & texture
 	cv::Mat img = file;
 	if (img.channels() != 3 || mask.channels() != 1 || ((img.type() & CV_MAT_DEPTH_MASK) != CV_8U) || ((mask.type() & CV_MAT_DEPTH_MASK) != CV_8U))
 	{
-		SKCommon::errorOutput(DEBUG_STRING + "Only 3 channel uchar texture & 1 channel uchar mask is now supported.");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + "Only 3 channel uchar texture & 1 channel uchar mask is now supported.");
 		return -1;
 	}
 	glGenTextures(1, &texture_id);
@@ -410,7 +410,7 @@ int SKOpenGL::window::InitGlfw(WindowSetting setting, std::string name)
 {
 	_setting = setting;
 	if (!glfwInit()) {
-		SKCommon::errorOutput(DEBUG_STRING + "Failed to initialize GLFW");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + "Failed to initialize GLFW");
 		return -1;
 	}
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -455,7 +455,7 @@ int SKOpenGL::window::InitGlfw(WindowSetting setting, std::string name)
 	glfwSetWindowPos(windowPtr, 100, 100);
 	if (windowPtr == nullptr)
 	{
-		SKCommon::errorOutput(DEBUG_STRING + " Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + " Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.");
 		glfwTerminate();
 		return -2;
 	}
@@ -473,7 +473,7 @@ int SKOpenGL::window::InitGlfw(WindowSetting setting, std::string name)
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) 
 	{
-		SKCommon::errorOutput(DEBUG_STRING + " Failed to initialize GLEW.");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + " Failed to initialize GLEW.");
 		return -3;
 	}
 
@@ -823,7 +823,7 @@ int SKOpenGL::framebuffer::init(camera glcam_, int width_, int height_)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTextureID, 0);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		SKCommon::errorOutput(DEBUG_STRING + "Framebuffer is not complete!");
+		SKCommon::errorOutput(SKCOMMON_DEBUG_STRING + "Framebuffer is not complete!");
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
