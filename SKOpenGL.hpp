@@ -32,6 +32,8 @@ ShadowK's OpenGl Common Usage functions & class
 
 #include "SKCommon.hpp"
 
+#include <cuda_gl_interop.h>
+
 #define PI 3.1415926536
 
 namespace SKOpenGL {
