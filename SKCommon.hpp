@@ -276,7 +276,33 @@ public:
 
 	static std::string getFileExtention(std::string fileName)
 	{
-		return fileName.substr(fileName.find_last_of(".") + 1);
+		struct stat s;
+		if (stat(fileName.c_str(), &s) == 0)
+		{
+			if (s.st_mode & S_IFDIR)
+			{
+				//it's a directory
+				return "";
+			}
+			else if (s.st_mode & S_IFREG)
+			{
+				//it's a file
+				if (fileName.find_last_of(".") == -1)
+					return "";
+				else
+					return fileName.substr(fileName.find_last_of(".") + 1);
+			}
+			else
+			{
+				//something else
+				return "";
+			}
+		}
+		else
+		{
+			//error
+			return "";
+		}
 	}
 	
 	static inline std::string toLower(std::string in)
