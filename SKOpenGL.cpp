@@ -273,7 +273,7 @@ int SKOpenGL::data::LoadTexture(cv::Mat file, GLuint & texture_id)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.cols, img.rows, 0, GL_BGRA, GL_UNSIGNED_BYTE, img.data);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	//glGenerateMipmap(GL_TEXTURE_2D);
 
 	//int w, h;
 	//int miplevel = 0;
@@ -329,7 +329,7 @@ int SKOpenGL::data::LoadTextureMask(cv::Mat file, cv::Mat mask, GLuint & texture
 		}
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.cols, img.rows, 0, GL_BGRA, GL_UNSIGNED_BYTE, img_full_data);
 	delete[] img_full_data;
-	glGenerateMipmap(GL_TEXTURE_2D);
+	//glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	return 0;
 }
@@ -341,6 +341,7 @@ int SKOpenGL::data::ReadTextureRGB(GLuint textureID, cv::Mat & read)
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
 	read.create(h, w, CV_8UC4);
+	read.setTo(cv::Scalar(0, 0, 0, 0));
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, read.data);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	cv::cvtColor(read, read, cv::COLOR_RGBA2RGB);
