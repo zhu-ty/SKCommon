@@ -128,12 +128,13 @@ public:
 	}
 
 
-	static std::string getTimeString()
+	static std::string getTimeString(std::string format = "")
 	{
 		time_t timep;
 		time(&timep);
 		char tmp[64];
-		strftime(tmp, sizeof(tmp), "__%Y_%m_%d_%H_%M_%S__", localtime(&timep));
+		std::string _format = (format == "") ? "__%Y_%m_%d_%H_%M_%S__" : format;
+		strftime(tmp, sizeof(tmp), _format.c_str(), localtime(&timep));
 		return tmp;
 	}
 
